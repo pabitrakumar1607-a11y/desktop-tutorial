@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int solve(int i,int d,vector<int>& job,vector<vector<int>>& dp){
+        // if(i==job.size()&&d==0) return dp[i][d]=0;
+        // if(i==job.size()) return 1e9;
+        // if(d==0) return 1e9;
+        if(d==1){
+            int maxday=INT_MIN;
+            for(int j=i;j<job.size();j++){
+                maxday=max(maxday,job[j]);
+            }
+            return maxday;
+        }
+        if(dp[i][d]!=-1) return dp[i][d];
+        int ans=INT_MAX;
+        int x=0;
+        for(int j=i;j<=job.size()-d;j++){
+            x=max(job[j],x);
+            ans=min(ans,x+solve(j+1,d-1,job,dp));
+        }
+        return dp[i][d]=ans;
+    }
+    int minDifficulty(vector<int>& job, int d) {
+        int n=job.size();
+        if(n<d) return -1;
+        vector<vector<int>> dp(n + 1, vector<int>(d + 1, -1));
+        return solve(0,d,job,dp);
+    }
+};
