@@ -16,6 +16,7 @@ class Solution {
                     lastposition=s[k];
                 }
             }
+            // if you are able to place more than equal to k cows then definatly you should place k cows.
             if(c>=k){
                 ans=mid;
                 i=mid+1;
