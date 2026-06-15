@@ -1,0 +1,33 @@
+class Solution {
+public:
+    bool hasnoduplicate(string s1,string s2){
+        vector<int> v(26,0);
+        for(int i=0;i<s1.length();i++){
+            v[s1[i]-'a']=1;
+        }
+        for(int i=0;i<s2.length();i++){
+            if(v[s2[i]-'a']!=1) v[s2[i]-'a']=1;
+            else return false;
+        }
+        return true;
+    }
+    bool hasnoduplicate(string s1){
+        unordered_set<char> unique_chars(s1.begin(), s1.end());
+        return (unique_chars.size() == s1.length());
+    }
+    int helper(int i,vector<string>& arr,string s,unordered_map<string,int>& v){// i and string both are change in each function call
+        if(i>=arr.size()) return s.length();
+        if(v.find(s)!=v.end()) return v[s];// is it contain before 
+        if(hasnoduplicate(arr[i])&&hasnoduplicate(s,arr[i])){
+            int peak=helper(i+1,arr,s+arr[i],v);
+            int skip=helper(i+1,arr,s,v);
+            return v[s]=max(peak,skip);
+        }
+        return v[s]=helper(i+1,arr,s,v);
+    }
+    int maxLength(vector<string>& arr) {
+        string s="";
+        unordered_map<string,int> v;
+        return helper(0,arr,s,v);
+    }
+};
