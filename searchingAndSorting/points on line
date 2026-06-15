@@ -1,0 +1,32 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+int main() {
+    int n,k;
+    cin>>n>>k;
+    vector<ll> a(n);
+    for (int i=0;i<n;i++) cin>>a[i];
+    ll ans=0;
+    for (int i=0;i<n;i++) {
+        int j=i; k=n-1;
+        int idx=-1;
+        while (j<=k) {
+            int mid=j+(k-j)/2;
+            if (v[mid]-v[i]==d) {
+                idx=mid;
+                break;
+            }
+            else if (v[mid]-v[i]<d) {
+                idx=mid;
+                i=mid+1;
+            }
+            else j=mid-1;
+        }
+        if (idx!=-1) {
+            ll x=idx-i;
+            if (x>0) ans+=(x*(x-1)/2);
+        }
+    }
+    cout<<ans<<'\n';
+}
+// question link : https://codeforces.com/contest/251/problem/A
