@@ -1,0 +1,31 @@
+class Solution {
+public:
+    vector<int> squre(int n){
+        int x=(int)sqrt(n);
+        vector<int> v;
+        for(int i=1;i<=x;i++){
+            v.push_back(i*i);
+        }
+        return v;
+    }
+    int numSquares(int n) {
+        if(n==0||n==1) return n;
+        vector<int> v=squre(n);
+        vector<int> dp(n+1,-1);
+        return helper(n,v,dp);
+    }
+    int helper(int n,vector<int>& v,vector<int>& dp){
+        if(n==0|| n==1) return n;
+        if(dp[n]!=-1) return dp[n];
+        int ans=INT_MAX;
+        int x=0;
+        for(int i=0;i<v.size();i++){
+            if(n>=v[i]){
+                x=1+helper(n-v[i],v,dp);
+            } 
+            ans=min(ans,x);
+        }
+        return dp[n]=ans;
+    }
+};
+// code link: https://leetcode.com/problems/perfect-squares/
