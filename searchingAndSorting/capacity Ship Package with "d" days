@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int shipWithinDays(vector<int>& w, int days) {
+        int n=w.size();
+        long long sum=0;
+        long long max_val=0;
+        for(int i=0;i<n;i++){
+            max_val=max(max_val,(long long)w[i]);
+            sum+=w[i];
+        }
+        // my ans lieys between max and sum
+        long long ans=0;
+        long long i=max_val,j=sum;
+        while(i<=j){
+            long long mid=i+(j-i)/2 ;
+            // is mid my ans check
+            int d=1;
+            long long c=mid;
+            for(int k=0;k<n;k++){
+                if(c>=w[k]) c-=w[k];
+                else{
+                    d++;
+                    c=mid;
+                    c-=w[k];
+                }
+            }
+            if(d<=days){
+                ans=mid;
+                j=mid-1;
+            }
+            else{
+                i=mid+1;
+            }
+        }
+        return ans; 
+    }
+};
