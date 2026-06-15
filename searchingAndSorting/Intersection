@@ -1,0 +1,65 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+ll mergetwosorttedArray(vector<int>& b,vector<int>& c,vector<int>& a) {
+    ll count=0;
+    int i=0,j=0,k=0;
+    while (i<b.size() && j<c.size()) {
+        if (b[i]<=c[j]) {
+            a[k++]=b[i++];
+        }
+        else {
+            count+=b.size()-i;
+            a[k++]=c[j++];
+        }
+    }
+    while (i < b.size()) {
+        a[k++] = b[i++];
+    }
+    while (j < c.size()) {
+        a[k++] = c[j++];
+    }
+    return count;
+}
+ll countInversion(vector<int>& a) {
+    int n=a.size();
+    if (n<=1) return 0;
+    vector<int> b(n/2);
+    vector<int> c(n-(n/2));
+    int j=0;
+    for(int i=0;i<b.size();i++) {
+        b[i]=a[j];
+        j++;
+    }
+    for(int i=0;i<c.size();i++) {
+        c[i]=a[j];
+        j++;
+    }
+    ll x=countInversion(b)+countInversion(c)+mergetwosorttedArray(b,c,a);
+    return x;
+}
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    int t;
+    if (!(cin >> t)) return 0;
+    while(t--) {
+        int n;
+        cin>>n;
+        vector<int> a(n);
+        for(int i=0;i<n;i++) {
+            cin>>a[i];
+        }
+        vector<int> mp(n+1);
+        for(int i=0;i<n;i++) {
+            int k;
+            cin>>k;
+            mp[k]= i+1;
+        }
+        for (int i=0;i<n;i++) {
+            a[i]=mp[a[i]];
+        }
+        cout<<countInversion(a)<<'\n';
+    }
+}
+//question link:https://codeforces.com/gym/101853/problem/C
