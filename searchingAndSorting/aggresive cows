@@ -1,0 +1,29 @@
+class Solution {
+  public:
+    int aggressiveCows(vector<int> &s, int k) {
+        // code here
+        sort(s.begin(), s.end());
+        int ans=0;
+        int i=1,j=s[s.size()-1]-s[0];
+        while(i<=j){
+            int mid=i+(j-i)/2;
+            // is mid is my possiable ans
+            int c=1;
+            int lastposition=s[0];
+            for(int k=1;k<s.size();k++){
+                if(s[k]-lastposition>=mid){
+                    c++;
+                    lastposition=s[k];
+                }
+            }
+            if(c>=k){
+                ans=mid;
+                i=mid+1;
+            }
+            else{
+                j=mid-1;
+            }
+        }
+        return ans;
+    }
+};
