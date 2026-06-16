@@ -1,0 +1,44 @@
+class Solution {
+public:
+    int jobScheduling(vector<int>& startTime, vector<int>& endTime, vector<int>& profit) {
+        int n=profit.size();
+        vector<tuple<int, int, int>> v;
+        for(int i = 0; i < startTime.size(); i++){
+            v.push_back({startTime[i], endTime[i], profit[i]}); // Added curly braces
+        }
+        vector<int> dp(n+1,-1);
+        sort(v.begin(), v.end());
+        return helper(0,v,dp);
+    }
+    int helper(int i,vector<tuple<int, int, int>>& v,vector<int>& dp){//O(nlogn)--> 50,000×16≈800,000 operations.
+        if(i>=v.size()) return 0;
+        if(dp[i]!=-1) return dp[i];
+        int x=get<1>(v[i]);
+        int ans=0;
+        int ans1=0;
+        // for(int j=i+1;j<v.size();j++){  // O(n)
+        //     if(get<0>(v[j])>=x){
+        //         ans=max(ans,helper(j,v,dp));
+        //     }
+        //     else{
+        //         ans1=max(ans1,helper(j,v,dp));
+        //     }
+        // }
+        // now i have two choiess 
+        //-->category1: if take that one i have to find the next whoose starting time is greater than the ending time of current one 
+        int idx=-1;
+        int j=i+1,k=v.size()-1;
+        while(j<=k){//O(logN)
+            int mid=j+(k-j)/2;
+            if(get<0>(v[mid])>=x){
+                idx=mid;
+                k=mid-1;
+            }
+            else j=mid+1;
+        }
+        if(idx!=-1) ans=helper(idx,v,dp);
+        //-->category2:if don't take that one or if there any index is not available then i have to shifted to there next element (may be that catagory1 or may not be in catagory2).
+        ans1=helper(i+1,v,dp);
+        return dp[i]=max(ans1,get<2>(v[i])+ans);
+    }
+};
