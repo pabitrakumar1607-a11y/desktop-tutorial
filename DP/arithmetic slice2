@@ -1,0 +1,56 @@
+class Solution {
+#define ll long long
+public:
+    // tabulation
+    int numberOfArithmeticSlices(vector<int>& nums) {
+        int n=nums.size();
+        ll count=0;
+        vector<unordered_map<ll,ll>> dp(n);
+        for(int i=0;i<nums.size();i++){//O(n^2)
+            for(int j=0;j<i;j++){
+                ll diff= (ll)nums[i]-nums[j];
+                if(dp[j].find(diff)!=dp[j].end()){
+                    count+=dp[j][diff];
+                }
+                dp[i][diff]+=(1+dp[j][diff]);
+            }
+        }
+        /*dp[i][diff]=number of arithmetic subsequences of length >= 2
+                   ending at index i with common difference diff  */
+        return count;
+    }
+    // TC:O(n^2)
+    // SC:O(n^2)
+
+    // memoisation
+    // int numberOfArithmeticSlices(vector<int>& nums) {
+    //     int n=nums.size();
+    //     ll count=0;
+    //     vector<unordered_map<int,ll>> dp(n+1);
+    //     for(int i=0;i<nums.size();i++){//O(n^2)
+    //         for(int j=0;j<i;j++){
+    //             count+=helper(j,(ll)nums[i]-nums[j],nums,dp);
+    //         }
+    //     }
+    //     /*dp[idx][diff]=number of arithmetic subsequences that end at idx
+    //             and can be extended backward with common difference diff*/
+    //     return count;
+    // }
+
+    // ll helper(int idx,ll diff,vector<int>& nums,vector<unordered_map<int,ll>>& dp){//(O(n))
+    //     if(idx==0) return 0;
+    //     /* to make length at least 3, we need to find elements before j such that: nums[j] - previous = diff*/
+    //     if(dp[idx].find(diff)!=dp[idx].end()) return dp[idx][diff];
+    //     ll count =0;
+    //     for(int i=idx-1;i>=0;i--){//It counts how many arithmetic subsequences can be formed before index j using same difference.
+    //         if((ll)nums[idx]-nums[i]==diff){
+    //             count+=(1+helper(i,diff,nums,dp));
+    //             //1 means I found one valid previous element.
+    //             //helper(i,diff,nums,dp) means checks whether we can extend even further backward.
+    //         }
+    //     }
+    //     return dp[idx][diff]=count;// update the value and return 
+    // }
+};
+// TC:O(n^3)
+// SC:O(n^2)
