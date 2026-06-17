@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int bagOfTokensScore(vector<int>& tokens, int power) {
+        sort(tokens.begin(),tokens.end());
+        int n=tokens.size();
+        if(n==0) return 0;
+        if(tokens[0]>power) return 0;
+        int ans=0;
+        int score=0;
+        int i=0,j=n-1;
+        while(i<=j){
+            if(tokens[i]<=power){// My primary objective is to maximize my score to the greatest extent possible.
+                score++;
+                power-=tokens[i];
+                i++;
+                ans=max(ans,score);
+            }
+            else if(score>0){
+                score--;
+                power+=tokens[j];
+                j--;
+            }
+            else {
+                break;
+            }
+        }
+        return ans;
+    }
+};
