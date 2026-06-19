@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int n=prices.size();
+        vector<map<int,int>> v(n+1);
+        return helper(0,prices,-1,v);;
+    }
+    int helper(int i,vector<int>& prices,int buy,vector<map<int,int>>& v){
+        //If we reached beyond the last day, there are no more prices left, so no more profit can be made.
+        if(i>=prices.size()) return 0;
+        if(v[i].find(buy)!=v[i].end()) return v[i][buy];
+        if(buy==-1){// i did not buy anything
+            //  i have two choise 
+            int b=helper(i+1,prices,prices[i],v);
+            int notbuy=helper(i+1,prices,buy,v);
+            return v[i][buy]=max(b,notbuy);
+        }
+        else{// already buy i have to sell it now
+            int s=prices[i]-buy+helper(i+2,prices,-1,v);
+            int notsell=helper(i+1,prices,buy,v);
+            return v[i][buy]=max(notsell,s);
+        }
+    }
+};
