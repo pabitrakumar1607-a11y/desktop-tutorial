@@ -1,0 +1,44 @@
+class Solution {
+public:
+    int minFlipsMonoIncr(string s) {
+        vector<vector<int>> v(s.length(), vector<int>(2, -1));
+        return helper(0,s[0],s,v);
+    }
+    int helper(int i,char prev,string& s,vector<vector<int>>& v){// i ad prev both are changing
+        if(i>=s.length()) return 0;
+        int p=prev-'0';
+        if(v[i][p]!=-1) return v[i][p];
+        if(i==0){// two choise
+            if(s[i]=='1'){
+                int flip=1+helper(i+1,'0',s,v);// flip
+                int notflip=helper(i+1,'1',s,v);//not flip
+                return v[i][p]=min(flip,notflip);
+            }
+            else{
+                int flip=1+helper(i+1,'1',s,v);// flip
+                int notflip=helper(i+1,'0',s,v);//not flip
+                return v[i][p]=min(flip,notflip);
+            }
+        }
+        if(s[i]=='1'){
+            if(prev=='0'){// in this case i can flip or not flip
+                int flip=1+helper(i+1,'0',s,v);// flip
+                int notflip=helper(i+1,'1',s,v);//not flip
+                return v[i][p]=min(flip,notflip);
+            }
+            else{// s[i-1]=='1'
+                return v[i][p]=helper(i+1,'1',s,v);
+            }
+        }
+        else{
+            if(prev=='0'){// in this case i can flip or not flip
+                int flip=1+helper(i+1,'1',s,v);// flip
+                int notflip=helper(i+1,'0',s,v);//not flip
+                return v[i][p]=min(flip,notflip);
+            }
+            else{// s[i-1]=='1'
+                return v[i][p]=1+helper(i+1,'1',s,v);
+            }
+        }
+    }
+};
