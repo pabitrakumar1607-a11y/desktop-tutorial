@@ -1,0 +1,27 @@
+class Solution {
+public:
+    bool isScramble(string s1, string s2) {
+        unordered_map<string,bool> mp;
+        return helper(s1,s2,mp);
+    }
+    bool helper(string s1, string s2,unordered_map<string,bool>& mp){// both s1 and s2 are changed
+        if(s1==s2) return true;
+        string ans=s1+'_'+s2;
+        if(mp.find(ans)!=mp.end()) return mp[ans];
+        int n=s1.length();
+        bool flag=false;
+        for(int i=1;i<s1.length();i++){
+            bool notswap=helper(s1.substr(0,i),s2.substr(0,i),mp)&&helper(s1.substr(i,n-i),s2.substr(i,n-i),mp);
+            if(notswap) {
+                flag=true;
+                break;
+            }
+            bool swap=helper(s1.substr(0,i),s2.substr(n-i,i),mp)&&helper(s1.substr(i,n-i),s2.substr(0,n-i),mp);
+            if(notswap||swap) {
+                flag=true;
+                break;
+            }
+        }
+        return mp[ans]=flag;
+    }
+};// MCM partten question
