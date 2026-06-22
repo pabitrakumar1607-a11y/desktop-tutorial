@@ -1,0 +1,46 @@
+class Solution {
+public:
+    int maxValueOfCoins(vector<vector<int>>& piles, int k) {
+        int n=piles.size();
+        vector<vector<int>> dp(n+1,vector<int>(k+1,-1));
+        return helper(piles,0,k,dp);
+    }
+    int helper(vector<vector<int>>& piles,int i,int k,vector<vector<int>>& dp){
+        if(i>=piles.size()||k<=0) return 0;
+        if(dp[i][k]!=-1) return dp[i][k];
+        int nottaken=helper(piles,i+1,k,dp);
+        // if taken
+        int sum=0;
+        int max_res=0;
+        for(int j=0;j<min(k,(int)piles[i].size());j++){
+            sum+=piles[i][j];
+            if(k-(j+1)>=0){
+                max_res=max(max_res,sum+helper(piles,i+1,k-(j+1),dp));
+            }
+        }
+        return dp[i][k]=max(max_res,nottaken);
+    }
+};
+
+
+
+// class Solution {
+// public:
+//     int maxValueOfCoins(vector<vector<int>>& piles, int k) {
+//         int n=piles.size();
+//         vector<int> idx(n,0);
+
+//         return helper(piles,idx,k);
+//     }
+//     int helper(vector<vector<int>>& piles,vector<int>& idx,int k){ // each and every call your idx is changing and k is also changing
+//         if(k<=0) return 0;
+//         int count=0;
+//         for(int i=0;i<piles.size();i++){
+//             if(piles[i].size()>idx[i]) {
+//                 count=max(count,piles[i][idx[i]++]+helper(piles,idx,k-1));
+//                 idx[i]--;// backtracking
+//             }
+//         }
+//         return count;
+//     }
+// };
