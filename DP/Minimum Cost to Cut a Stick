@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int memo(int st,int en,vector<int>& cuts,vector<vector<int>>& dp){
+        if(en-1<st+1) return 0;
+        if(dp[st][en]!=-1) return dp[st][en];
+        int ans=INT_MAX;
+        int x=cuts[en]-cuts[st];
+        for(int i=st+1;i<=en-1;i++){
+            int x1=memo(st,i,cuts,dp)+memo(i,en,cuts,dp);
+            ans=min(ans,x1);
+        }
+        return dp[st][en]=x+ans;
+    }
+    int minCost(int n, vector<int>& cuts) {
+        cuts.push_back(n);
+        cuts.push_back(0);
+        sort(cuts.begin(),cuts.end());
+        vector<vector<int>> dp(cuts.size()+1,vector<int> (cuts.size()+1,-1));
+        return memo(0,cuts.size()-1,cuts,dp);
+    }
+};
