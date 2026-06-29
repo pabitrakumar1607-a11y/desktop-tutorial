@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int memo(int i ,int j,string& w1, string& w2,vector<vector<int>>& dp){// i and j both are changing
+        if(i>=w1.length()&&j>=w2.length()) return 0;
+        if(j>=w2.length()) return w1.length()-i;
+        if(i>=w1.length()) return w2.length()-j;
+        if(dp[i][j]!=-1) return dp[i][j];
+        if(w1[i]==w2[j]){
+            return  dp[i][j]=memo(i+1,j+1,w1,w2,dp);
+        }
+        else{
+            // replace 
+            int x1=1+memo(i+1,j+1,w1,w2,dp);
+            //delete
+            int x2=1+memo(i+1,j,w1,w2,dp);
+            // insert
+            int x3=1+memo(i,j+1,w1,w2,dp);
+            return  dp[i][j]=min({x1,x2,x3});
+        }
+    }
+    int minDistance(string w1, string w2) {
+        vector<vector<int>> dp(w1.size()+1,vector<int>(w2.size()+1,-1));
+        return memo(0,0,w1,w2,dp);
+    }
+};
