@@ -1,0 +1,54 @@
+class Solution {
+public:
+    bool memo(int i,int j,string& s, string& p,vector<vector<int>>& dp){
+        if(i>=s.length()&&j>=p.length()) return true;
+        if(dp[i][j]!=-1) return dp[i][j];
+        if(i>=s.length()){
+            if(p[j]=='*') return dp[i][j]=memo(i,j+1,s,p,dp);
+            else return dp[i][j]=false;
+        }
+        if(j>=p.length()) return dp[i][j]=false;
+        if(s[i]==p[j]||p[j]=='?') return dp[i][j]=memo(i+1,j+1,s,p,dp);
+        else if(p[j]=='*') return dp[i][j]=memo(i+1,j,s,p,dp)||memo(i,j+1,s,p,dp);
+        else return dp[i][j]=false;
+    }
+    bool isMatch(string s, string p) {
+        vector<vector<int>> dp(s.length()+1,vector<int>(p.length()+1,-1));
+        return memo(0,0,s,p,dp);
+    }
+};
+
+//greedy approch gone wrong when p="a*" s="aa" , p="a*" s="aabcd"
+// in this case you have two choices 
+// class Solution {
+// public:
+//     bool isMatch(string s, string p) {
+//         int i=s.length()-1;
+//         int j=p.length()-1;
+//         bool flag=false;
+//         while(i>=0&&j>=0){
+//             if(p[j]=='*'){
+//                 while(j>=0&&(p[j]=='*'||p[j]=='?')){
+//                     j--;
+//                 }
+//                 if(j<0) flag=true;
+//                 while(i>=0&&j>=0&&(p[j]!=s[i])) i--;
+//             }
+//             else if(p[j]=='?'){
+//                 i--;j--;
+//             }
+//             else if(s[i]==p[j]){
+//                 i--;
+//                 j--;
+//             }
+//             else if(s[i]!=p[j]){
+//                 return false;
+//             }
+//         }
+//         while(j>=0&&p[j]=='*') j--;
+//         if(flag==true) return true;
+//         else if(i<0&&j<0) return true;
+//         else return false;
+
+//     }
+// };
