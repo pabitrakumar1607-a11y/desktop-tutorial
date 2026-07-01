@@ -1,0 +1,17 @@
+class Solution {
+public:
+    // backtraking +unboundedKnapsack+dp
+    int memo(int i,vector<int>& nums, int target,vector<vector<int>>& dp){
+        if(target==0) return 1;
+        if(i>=nums.size()) return 0;
+        if(dp[i][target]!=-1) return dp[i][target];
+        if(target>=nums[i]){
+            return dp[i][target]=memo(0,nums,target-nums[i],dp)+memo(i+1,nums,target,dp);
+        }
+        else return dp[i][target]=memo(i+1,nums,target,dp);
+    }
+    int combinationSum4(vector<int>& nums, int target) {
+        vector<vector<int>> dp(nums.size()+1,vector<int>(target+1,-1));
+        return memo(0,nums,target,dp);
+    }
+};
