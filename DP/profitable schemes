@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int mod=1e9+7;
+    int memo(int i,int currprofit,int n,int minprofit,vector<int>& group, vector<int>& profit,vector<vector<vector<int>>>& dp){// currprofit varry from  0 to minprofit
+        if(i>=group.size()){
+            if(currprofit==minprofit) return 1;
+            else return 0;
+        }
+        if(dp[i][n][currprofit]!=-1) return dp[i][n][currprofit];
+        if(group[i]<=n){
+            return dp[i][n][currprofit]=(memo(i+1,min(currprofit+profit[i],minprofit),n-group[i],minprofit,group,profit,dp)%mod+memo(i+1,currprofit,n,minprofit,group,profit,dp)%mod)%mod;
+        }
+        else return dp[i][n][currprofit]=memo(i+1,currprofit,n,minprofit,group,profit,dp)%mod;
+    }
+    int profitableSchemes(int n, int minProfit, vector<int>& group, vector<int>& profit) {
+        vector<vector<vector<int>>> dp(group.size()+1,vector<vector<int>>(n+1,vector<int>(minProfit+1,-1)));
+        return memo(0,0,n,minProfit,group,profit,dp);
+    }
+};
+
+
+// class Solution {
+// public:
+//     int mod=1e9+7;
+//     // in this code  minprofit can be varry from -group.size()*max(profit[i])---- minprofit --> which is 10^4
+//     int memo(int i,int n,int minprofit,vector<int>& group, vector<int>& profit){
+//         if(i>=group.size()){
+//             if(minprofit<=0) return 1;
+//             else return 0;
+//         }
+//         if(group[i]<=n){
+//             return memo(i+1,n-group[i],minprofit-profit[i],group,profit)+memo(i+1,n,minprofit,group,profit);
+//         }
+//         else return memo(i+1,n,minprofit,group,profit);
+//     }
+//     int profitableSchemes(int n, int minProfit, vector<int>& group, vector<int>& profit) {
+//         return memo(0,n,minProfit,group,profit);
+//     }
+// };
