@@ -1,0 +1,45 @@
+class Solution {
+public:
+    int memo(int i,vector<int>& nums,int ans,vector<vector<int>>& dp,int x){// O(2*10^4*n)--> 50000000 no of operation
+        if(i>=nums.size()) return 0;
+        if(dp[i][ans+x]!=-1) return dp[i][ans+x];
+        if(nums[i]>ans){
+            return dp[i][ans+x]=max(1+memo(i+1,nums,nums[i],dp,x),memo(i+1,nums,ans,dp,x));
+        }
+        else return dp[i][ans+x]=memo(i+1,nums,ans,dp,x);
+    }
+    int tabu(vector<int>& nums){
+        int n=nums.size();
+        vector<int> lis(n,1);
+        vector<int> count_lis(n,1);
+        int ans=1;
+        for(int i=1;i<n;i++){
+            for(int j=0;j<=i;j++){
+                if(nums[i]>nums[j]){
+                    lis[i]=max(lis[i],1+lis[j]);
+                }
+            }
+            ans=max(ans,lis[i]);
+        }
+        return ans;
+    }
+    int binarysearch(vector<int>& nums){
+        vector<int> v;
+        v.push_back(nums[0]);
+        for(int i=1;i<nums.size();i++){
+            if(nums[i]>v.back()){
+                v.push_back(nums[i]);
+            }
+            else{
+                int idx=lower_bound(v.begin(),v.end(),nums[i])-v.begin();
+                v[idx]=nums[i];
+            }
+        }
+        return v.size();
+    }
+    int lengthOfLIS(vector<int>& nums) {
+        vector<vector<int>> dp(nums.size()+1,vector<int>(2*1e4+10,-1));
+        // return memo(0,nums,-1e4-1,dp,1e4+1);
+        return tabu(nums);
+    }
+};
