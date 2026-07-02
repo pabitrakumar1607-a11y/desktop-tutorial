@@ -1,0 +1,61 @@
+class Solution {
+public:
+    int tabu(vector<int>& nums){
+        int n=nums.size();
+        vector<int> lis(n,1);
+        vector<int> count_lis(n,1);
+        int len=1;
+        for(int i=1;i<n;i++){
+            for(int j=0;j<=i;j++){
+                if(nums[i]>nums[j]){
+                    if(lis[i]==1+lis[j]){
+                        count_lis[i]+=count_lis[j];
+                    }
+                    else if(lis[i]<1+lis[j]){
+                        count_lis[i]=count_lis[j];
+                    }
+                    lis[i]=max(lis[i],1+lis[j]);
+                }
+            }
+            len=max(len,lis[i]);
+        }
+        int ans=0;
+        for(int i=0;i<n;i++){
+            if(lis[i]==len) ans+=count_lis[i];
+        }
+        return ans;
+
+    }
+    int findNumberOfLIS(vector<int>& nums) {
+        return tabu(nums);
+    }
+};
+
+
+// class Solution {
+// public:
+//     int liSmemo(int i,int preidx,vector<int>& nums,vector<vector<int>>& dp){
+//         if(i>=nums.size()) return 0;
+//         if(dp[i][preidx+1]!=-1) return dp[i][preidx+1];
+//         if(preidx==-1||nums[i]>nums[preidx]){
+//             return dp[i][preidx+1]=max(1+liSmemo(i+1,i,nums,dp),liSmemo(i+1,preidx,nums,dp));
+//         }
+//         else return dp[i][preidx+1]=liSmemo(i+1,preidx,nums,dp);
+//     }
+//     int memo(int i,int preidx,vector<int>& nums,int len){// after applying dp O(n^3)--> tle
+//         if(len==0) return 1;
+//         if(i>=nums.size()) {
+//             return 0;
+//         }
+//         if(preidx==-1||nums[i]>nums[preidx]){
+//             return memo(i+1,i,nums,len-1)+memo(i+1,preidx,nums,len);
+//         }
+//         else return memo(i+1,preidx,nums,len);
+//     }
+
+//     int findNumberOfLIS(vector<int>& nums) {
+//         vector<vector<int>> dp(nums.size()+1,vector<int>(nums.size()+1,-1));
+//         int len=liSmemo(0,-1,nums,dp);
+//         return memo(0,-1,nums,len);
+//     }
+// };
